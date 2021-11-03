@@ -11,6 +11,7 @@ data class Customer(
     val phone: String,
     val city: String,
     val address: String,
+    //val country: Country
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     val id: Long = -1
