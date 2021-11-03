@@ -6,5 +6,4 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface EmployeeRepository : CrudRepository<Employee, Long> {
-    fun findBySurname(surname: String): Iterable<Employee>
 }

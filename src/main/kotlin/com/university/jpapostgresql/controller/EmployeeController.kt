@@ -3,35 +3,79 @@ package com.university.jpapostgresql.controller
 import com.university.jpapostgresql.model.Employee
 import com.university.jpapostgresql.repository.EmployeeRepository
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
+import org.springframework.util.ObjectUtils
+import org.springframework.web.bind.annotation.*
+import org.springframework.web.util.UriComponentsBuilder
 
 @RestController
+@RequestMapping("/api")
 class EmployeeController {
 
     @Autowired
     lateinit var repository: EmployeeRepository
 
-    @RequestMapping("/save")
-    fun save(): String {
-        repository.save(Employee("Канарейка", "Иван", "г.Донецк, ул. Артёма, 25/5", "0713333322"))
-		repository.save(Employee("Горбань", "Елена", "г.Донецк, ул. Ленина, 47/2", "0714444455"))
-		repository.save(Employee("Умко", "Мария", "г.Макеевка, ул. Бирюзова, 5/15", "0712222299"))
-		repository.save(Employee("Борбуч", "Виталий", "г.Донецк, ул. Куприна, 21", "0718889977"))
-		repository.save(Employee("Цветок", "Илья", "г.Донецк, ул. Ткаченко, 53/15", "0711114455"))
+    @RequestMapping("/employees")
+    fun findAll(): ResponseEntity<List<Employee>> {
+        val employees = repository.findAll().toList()
+        if (employees.isEmpty()) {
+            return ResponseEntity<List<Employee>>(HttpStatus.NO_CONTENT)
+        }
+        return ResponseEntity<List<Employee>>(employees, HttpStatus.OK)
+    }
 
-		return "Done"
-	}
+    @RequestMapping("/employees/{id}")
+    fun findById(@PathVariable id: Long): ResponseEntity<Employee> {
+        val employee = repository.findById(id)
+        if (employee.isPresent) {
+            return ResponseEntity<Employee>(employee.get(), HttpStatus.OK)
+        }
+        return ResponseEntity<Employee>(HttpStatus.NOT_FOUND)
+    }
 
-    @RequestMapping("/findall")
-    fun findAll() = repository.findAll()
+    @PostMapping("/employees")
+    fun addEmployee(@RequestBody employee: Employee, uri: UriComponentsBuilder): ResponseEntity<Employee> {
+        val persistedEmployee = repository.save(employee)
+        if (ObjectUtils.isEmpty(persistedEmployee)) {
+            return ResponseEntity<Employee>(HttpStatus.BAD_REQUEST)
+        }
+        val headers = HttpHeaders()
+        headers.setLocation(uri.path("/employee/{id}").buildAndExpand(employee.id).toUri());
+        return ResponseEntity(headers, HttpStatus.CREATED)
+    }
 
-    @RequestMapping("/findbyid/{id}")
-    fun findById(@PathVariable id: Long)
-            = repository.findById(id)
+    @PutMapping("/employees/{id}")
+    fun updateEmployeeById(@PathVariable("id") id: Long, @RequestBody employee: Employee): ResponseEntity<Employee> {
+        return repository.findById(id).map { employeeDetails ->
+            val updatedEmployee: Employee = employeeDetails.copy(
+                surname = employee.surname,
+                name = employee.name,
+                address = employee.address,
+                phone = employee.phone
+            )
+            ResponseEntity(repository.save(updatedEmployee), HttpStatus.OK)
+        }.orElse(ResponseEntity<Employee>(HttpStatus.INTERNAL_SERVER_ERROR))
+    }
 
-    @RequestMapping("/findbysurname/{surname}")
-    fun findByLastName(@PathVariable surname: String)
-            = repository.findBySurname(surname)
+    @DeleteMapping("/employees/{id}")
+    fun removeEmployeeById(@PathVariable("id") id: Long): ResponseEntity<Void> {
+        val employee = repository.findById(id)
+        if (employee.isPresent) {
+            repository.deleteById(id)
+            return ResponseEntity<Void>(HttpStatus.NO_CONTENT)
+        }
+        return ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR)
+    }
+
+    @DeleteMapping("/employees")
+    fun removeEmployees(): ResponseEntity<Void> {
+        val employees = repository.findAll().toList()
+        if (employees.isEmpty()) {
+            return ResponseEntity<Void>(HttpStatus.NO_CONTENT)
+        }
+        repository.deleteAll()
+        return ResponseEntity<Void>(HttpStatus.OK)
+    }
 }
