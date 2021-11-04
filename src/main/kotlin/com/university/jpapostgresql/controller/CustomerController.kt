@@ -55,7 +55,8 @@ class CustomerController {
                 organization = customer.organization,
                 phone = customer.phone,
                 city = customer.city,
-                address = customer.address
+                address = customer.address,
+                countryId = customer.countryId
             )
             ResponseEntity(repository.save(updatedCustomer), HttpStatus.OK)
         }.orElse(ResponseEntity<Customer>(HttpStatus.INTERNAL_SERVER_ERROR))

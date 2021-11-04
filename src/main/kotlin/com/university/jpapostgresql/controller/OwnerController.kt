@@ -53,7 +53,8 @@ class OwnerController {
                 organization = owner.organization,
                 phone = owner.phone,
                 city = owner.city,
-                address = owner.address
+                address = owner.address,
+                countryId = owner.countryId
             )
             ResponseEntity(repository.save(updatedOwner), HttpStatus.OK)
         }.orElse(ResponseEntity<OwnerRealty>(HttpStatus.INTERNAL_SERVER_ERROR))

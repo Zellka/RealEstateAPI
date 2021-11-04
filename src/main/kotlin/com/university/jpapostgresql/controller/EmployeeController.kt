@@ -53,7 +53,8 @@ class EmployeeController {
                 surname = employee.surname,
                 name = employee.name,
                 address = employee.address,
-                phone = employee.phone
+                phone = employee.phone,
+                countryId = employee.countryId
             )
             ResponseEntity(repository.save(updatedEmployee), HttpStatus.OK)
         }.orElse(ResponseEntity<Employee>(HttpStatus.INTERNAL_SERVER_ERROR))
