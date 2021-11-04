@@ -11,8 +11,6 @@ data class Customer(
     @ManyToOne
     @JoinColumn(name = "country_id")
     val countryId: Country,
-    @OneToMany(mappedBy = "customerId")
-    val order: List<OrderRealty>,
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     val id: Long = -1

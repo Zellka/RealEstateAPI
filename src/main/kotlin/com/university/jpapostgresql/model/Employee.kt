@@ -9,10 +9,8 @@ data class Employee(
     val address: String,
     val phone: String,
     @ManyToOne
-    @JoinColumn(name="country_id")
+    @JoinColumn(name = "country_id")
     val countryId: Country,
-    @OneToMany(mappedBy = "employeeId")
-    val order: List<OrderRealty>,
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     val id: Long = -1

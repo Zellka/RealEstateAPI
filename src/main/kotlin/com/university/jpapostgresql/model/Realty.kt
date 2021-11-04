@@ -9,10 +9,10 @@ data class Realty(
     val description: String,
     val price: Long,
     @ManyToOne
-    @JoinColumn(name="category_id")
+    @JoinColumn(name = "category_id")
     val categoryId: Category,
     @ManyToOne
-    @JoinColumn(name="owner_id")
+    @JoinColumn(name = "owner_id")
     val ownerId: OwnerRealty,
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
