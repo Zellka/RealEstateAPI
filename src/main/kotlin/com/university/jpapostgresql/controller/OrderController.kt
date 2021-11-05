@@ -35,6 +35,15 @@ class OrderController {
         return ResponseEntity<OrderRealty>(HttpStatus.NOT_FOUND)
     }
 
+    @RequestMapping("/orders/employee/{id}")
+    fun findByEmployeeId(@PathVariable id: Long): ResponseEntity<List<OrderRealty>> {
+        val orders = repository.findByEmployeeId(id).toList()
+        if (orders.isEmpty()) {
+            return ResponseEntity<List<OrderRealty>>(HttpStatus.NO_CONTENT)
+        }
+        return ResponseEntity<List<OrderRealty>>(orders, HttpStatus.OK)
+    }
+
     @PostMapping("/orders")
     fun addOrder(@RequestBody order: OrderRealty, uri: UriComponentsBuilder): ResponseEntity<OrderRealty> {
         val persistedOrder = repository.save(order)
