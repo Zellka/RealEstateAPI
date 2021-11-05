@@ -35,6 +35,15 @@ class RealtyController {
         return ResponseEntity<Realty>(HttpStatus.NOT_FOUND)
     }
 
+    @RequestMapping("/realty-list/owner/{organization}")
+    fun findByOwnerOrganization(@PathVariable organization: String): ResponseEntity<List<Realty>> {
+        val realtyList = repository.findByOwnerOrganization(organization)
+        if (realtyList.isEmpty()) {
+            return ResponseEntity<List<Realty>>(HttpStatus.NO_CONTENT)
+        }
+        return ResponseEntity<List<Realty>>(realtyList, HttpStatus.OK)
+    }
+
     @PostMapping("/realty-list")
     fun addRealty(@RequestBody realty: Realty, uri: UriComponentsBuilder): ResponseEntity<Realty> {
         val persistedRealty = repository.save(realty)
