@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.util.ObjectUtils
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.util.UriComponentsBuilder
+import java.time.LocalDate
 
 @RestController
 @RequestMapping("/api")
@@ -68,6 +69,15 @@ class RealtyController {
     @RequestMapping("/realty-list/sold-realty")
     fun findSoldRealty(): ResponseEntity<List<Realty>> {
         val realtyList = repository.findSoldRealty()
+        if (realtyList.isEmpty()) {
+            return ResponseEntity<List<Realty>>(HttpStatus.NO_CONTENT)
+        }
+        return ResponseEntity<List<Realty>>(realtyList, HttpStatus.OK)
+    }
+
+    @RequestMapping("/realty-list/sold-realty/date/{year}/{month}/{day}")
+    fun findSoldRealtyByDate(@PathVariable year: Int, @PathVariable month: Int, @PathVariable day: Int): ResponseEntity<List<Realty>> {
+        val realtyList = repository.findSoldRealtyByDate(LocalDate.of(year, month, day))
         if (realtyList.isEmpty()) {
             return ResponseEntity<List<Realty>>(HttpStatus.NO_CONTENT)
         }
