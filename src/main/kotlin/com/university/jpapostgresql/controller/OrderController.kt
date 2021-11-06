@@ -38,7 +38,11 @@ class OrderController {
     }
 
     @RequestMapping("/orders/date/{year}/{month}/{day}")
-    fun findByCreatedDateAfter(@PathVariable year: Int, @PathVariable month: Int, @PathVariable day: Int): ResponseEntity<List<OrderRealty>> {
+    fun findByCreatedDateAfter(
+        @PathVariable year: Int,
+        @PathVariable month: Int,
+        @PathVariable day: Int
+    ): ResponseEntity<List<OrderRealty>> {
         val orders = repository.findByCreatedDateAfter(LocalDate.of(year, month, day))
         if (orders.isEmpty()) {
             return ResponseEntity<List<OrderRealty>>(HttpStatus.NO_CONTENT)
