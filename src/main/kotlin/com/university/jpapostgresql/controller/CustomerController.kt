@@ -10,7 +10,7 @@ import org.springframework.util.ObjectUtils
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.util.UriComponentsBuilder
 
-//http://localhost:8080/api/customers
+//http://localhost:8080/api/
 
 @RestController
 @RequestMapping("/api")
@@ -54,8 +54,8 @@ class CustomerController {
             val updatedCustomer: Customer = customerDetails.copy(
                 organization = customer.organization,
                 phone = customer.phone,
-                city = customer.city,
                 address = customer.address,
+                city = customer.city,
                 countryId = customer.countryId
             )
             ResponseEntity(repository.save(updatedCustomer), HttpStatus.OK)

@@ -19,7 +19,7 @@ class EmployeeController {
 
     @RequestMapping("/employees")
     fun findAll(): ResponseEntity<List<Employee>> {
-        val employees = repository.findAll().toList()
+        val employees = repository.findAll()
         if (employees.isEmpty()) {
             return ResponseEntity<List<Employee>>(HttpStatus.NO_CONTENT)
         }
@@ -33,6 +33,24 @@ class EmployeeController {
             return ResponseEntity<Employee>(employee.get(), HttpStatus.OK)
         }
         return ResponseEntity<Employee>(HttpStatus.NOT_FOUND)
+    }
+
+    @RequestMapping("/employees/num-year-worked/{num}")
+    fun findByNumYearWork(@PathVariable num: Long): ResponseEntity<List<Employee>> {
+        val employees = repository.findByNumYearWork(num)
+        if (employees.isEmpty()) {
+            return ResponseEntity<List<Employee>>(HttpStatus.NO_CONTENT)
+        }
+        return ResponseEntity<List<Employee>>(employees, HttpStatus.OK)
+    }
+
+    @RequestMapping("/employees/sum-sale/{sum}")
+    fun findBySumSale(@PathVariable sum: Long): ResponseEntity<List<Employee>> {
+        val employees = repository.findBySumSale(sum)
+        if (employees.isEmpty()) {
+            return ResponseEntity<List<Employee>>(HttpStatus.NO_CONTENT)
+        }
+        return ResponseEntity<List<Employee>>(employees, HttpStatus.OK)
     }
 
     @PostMapping("/employees")
@@ -52,9 +70,11 @@ class EmployeeController {
             val updatedEmployee: Employee = employeeDetails.copy(
                 surname = employee.surname,
                 name = employee.name,
-                address = employee.address,
                 phone = employee.phone,
-                countryId = employee.countryId
+                address = employee.address,
+                city = employee.city,
+                countryId = employee.countryId,
+                numYearWork = employee.numYearWork
             )
             ResponseEntity(repository.save(updatedEmployee), HttpStatus.OK)
         }.orElse(ResponseEntity<Employee>(HttpStatus.INTERNAL_SERVER_ERROR))
@@ -72,7 +92,7 @@ class EmployeeController {
 
     @DeleteMapping("/employees")
     fun removeEmployees(): ResponseEntity<Void> {
-        val employees = repository.findAll().toList()
+        val employees = repository.findAll()
         if (employees.isEmpty()) {
             return ResponseEntity<Void>(HttpStatus.NO_CONTENT)
         }

@@ -19,7 +19,7 @@ class OwnerController {
 
     @RequestMapping("/owners")
     fun findAll(): ResponseEntity<List<OwnerRealty>> {
-        val owners = repository.findAll().toList()
+        val owners = repository.findAll()
         if (owners.isEmpty()) {
             return ResponseEntity<List<OwnerRealty>>(HttpStatus.NO_CONTENT)
         }
@@ -33,6 +33,27 @@ class OwnerController {
             return ResponseEntity<OwnerRealty>(owner.get(), HttpStatus.OK)
         }
         return ResponseEntity<OwnerRealty>(HttpStatus.NOT_FOUND)
+    }
+
+    @RequestMapping("/owners/realty/{categoryId}")
+    fun findByCategoryRealty(@PathVariable categoryId: Long): ResponseEntity<List<OwnerRealty>> {
+        val owners = repository.findByCategoryRealty(categoryId)
+        if (owners.isEmpty()) {
+            return ResponseEntity<List<OwnerRealty>>(HttpStatus.NO_CONTENT)
+        }
+        return ResponseEntity<List<OwnerRealty>>(owners, HttpStatus.OK)
+    }
+
+    @RequestMapping("/owners/realty/{categoryId}/{countryId}")
+    fun findByCategoryAndCountry(
+        @PathVariable categoryId: Long,
+        @PathVariable countryId: Long
+    ): ResponseEntity<List<OwnerRealty>> {
+        val owners = repository.findByCategoryAndCountry(categoryId, countryId)
+        if (owners.isEmpty()) {
+            return ResponseEntity<List<OwnerRealty>>(HttpStatus.NO_CONTENT)
+        }
+        return ResponseEntity<List<OwnerRealty>>(owners, HttpStatus.OK)
     }
 
     @PostMapping("/owners")
@@ -52,8 +73,8 @@ class OwnerController {
             val updatedOwner: OwnerRealty = ownerDetails.copy(
                 organization = owner.organization,
                 phone = owner.phone,
-                city = owner.city,
                 address = owner.address,
+                city = owner.city,
                 countryId = owner.countryId
             )
             ResponseEntity(repository.save(updatedOwner), HttpStatus.OK)

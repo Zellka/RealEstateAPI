@@ -9,4 +9,19 @@ import org.springframework.stereotype.Repository
 interface RealtyRepository : JpaRepository<Realty, Long> {
     @Query("select r from Realty r where r.ownerId.organization = :organization")
     fun findByOwnerOrganization(organization: String): List<Realty>
+
+    @Query("select avg(r.price) from Realty r where r.categoryId.id = :categoryId")
+    fun findAvgPrice(categoryId: Long): Long
+
+    @Query("select avg(r.price) from Realty r where r.categoryId.id = :categoryId and r.city = :city")
+    fun findAvgPrice(categoryId: Long, city: String): Long
+
+    @Query("select r from Realty r, OrderRealty o where r.id = o.realtyId.id")
+    fun findSoldRealty(): List<Realty>
+
+    @Query("select r from Realty r where (current_date - r.date) > 180")
+    fun findOldRealtyByDate(): List<Realty>
+
+    @Query("select count(r) from Realty r, OrderRealty o where r.id = o.realtyId.id and r.categoryId.id = :categoryId")
+    fun findCountSoldRealtyByCategoryId(categoryId: Long): Long
 }

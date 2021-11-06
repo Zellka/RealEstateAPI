@@ -1,11 +1,16 @@
 package com.university.jpapostgresql.model
 
+import java.time.LocalDate
 import javax.persistence.*
 
 @Entity
 data class OrderRealty(
-    @OneToMany(mappedBy = "id")
-    val realtyId: List<Realty>,
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    val id: Long = -1,
+    @ManyToOne
+    @JoinColumn(name = "realty_id")
+    val realtyId: Realty,
     @ManyToOne
     @JoinColumn(name = "employee_id")
     val employeeId: Employee,
@@ -13,7 +18,5 @@ data class OrderRealty(
     @JoinColumn(name = "customer_id")
     val customerId: Customer,
     val price: Long,
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    val id: Long = -1
+    val date: LocalDate
 )

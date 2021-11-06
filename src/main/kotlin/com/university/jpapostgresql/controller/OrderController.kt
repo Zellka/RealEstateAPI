@@ -19,7 +19,7 @@ class OrderController {
 
     @RequestMapping("/orders")
     fun findAll(): ResponseEntity<List<OrderRealty>> {
-        val orders = repository.findAll().toList()
+        val orders = repository.findAll()
         if (orders.isEmpty()) {
             return ResponseEntity<List<OrderRealty>>(HttpStatus.NO_CONTENT)
         }
@@ -37,7 +37,7 @@ class OrderController {
 
     @RequestMapping("/orders/employee/{id}")
     fun findByEmployeeId(@PathVariable id: Long): ResponseEntity<List<OrderRealty>> {
-        val orders = repository.findByEmployeeId(id).toList()
+        val orders = repository.findByEmployeeId(id)
         if (orders.isEmpty()) {
             return ResponseEntity<List<OrderRealty>>(HttpStatus.NO_CONTENT)
         }
@@ -59,9 +59,11 @@ class OrderController {
     fun updateOrderById(@PathVariable("id") id: Long, @RequestBody order: OrderRealty): ResponseEntity<OrderRealty> {
         return repository.findById(id).map { orderDetails ->
             val updatedOrder: OrderRealty = orderDetails.copy(
-                price = order.price,
+                realtyId = order.realtyId,
                 employeeId = order.employeeId,
-                customerId = order.customerId
+                customerId = order.customerId,
+                price = order.price,
+                date = order.date
             )
             ResponseEntity(repository.save(updatedOrder), HttpStatus.OK)
         }.orElse(ResponseEntity<OrderRealty>(HttpStatus.INTERNAL_SERVER_ERROR))

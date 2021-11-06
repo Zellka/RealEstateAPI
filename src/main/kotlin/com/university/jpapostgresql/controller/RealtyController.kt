@@ -44,6 +44,36 @@ class RealtyController {
         return ResponseEntity<List<Realty>>(realtyList, HttpStatus.OK)
     }
 
+    @RequestMapping("/realty-list/old-realty")
+    fun findOldRealtyByDate(): ResponseEntity<List<Realty>> {
+        val realtyList = repository.findOldRealtyByDate()
+        if (realtyList.isEmpty()) {
+            return ResponseEntity<List<Realty>>(HttpStatus.NO_CONTENT)
+        }
+        return ResponseEntity<List<Realty>>(realtyList, HttpStatus.OK)
+    }
+
+    @RequestMapping("/realty-list/avg-price/{categoryId}")
+    fun findAvgPrice(@PathVariable categoryId: Long) =
+        repository.findAvgPrice(categoryId)
+
+    @RequestMapping("/realty-list/avg-price/{categoryId}/{city}")
+    fun findAvgPrice(@PathVariable categoryId: Long, @PathVariable city: String) =
+        repository.findAvgPrice(categoryId, city)
+
+    @RequestMapping("/realty-list/count-sold-realty/{categoryId}")
+    fun findCountSoldRealtyByCategoryId(@PathVariable categoryId: Long) =
+        repository.findCountSoldRealtyByCategoryId(categoryId)
+
+    @RequestMapping("/realty-list/sold-realty")
+    fun findSoldRealty(): ResponseEntity<List<Realty>> {
+        val realtyList = repository.findSoldRealty()
+        if (realtyList.isEmpty()) {
+            return ResponseEntity<List<Realty>>(HttpStatus.NO_CONTENT)
+        }
+        return ResponseEntity<List<Realty>>(realtyList, HttpStatus.OK)
+    }
+
     @PostMapping("/realty-list")
     fun addRealty(@RequestBody realty: Realty, uri: UriComponentsBuilder): ResponseEntity<Realty> {
         val persistedRealty = repository.save(realty)
@@ -59,12 +89,13 @@ class RealtyController {
     fun updateRealtyById(@PathVariable("id") id: Long, @RequestBody realty: Realty): ResponseEntity<Realty> {
         return repository.findById(id).map { realtyDetails ->
             val updatedRealty: Realty = realtyDetails.copy(
-                name = realty.name,
-                address = realty.address,
                 description = realty.description,
-                price = realty.price,
                 categoryId = realty.categoryId,
-                ownerId = realty.ownerId
+                ownerId = realty.ownerId,
+                price = realty.price,
+                address = realty.address,
+                city = realty.city,
+                countryId = realty.countryId
             )
             ResponseEntity(repository.save(updatedRealty), HttpStatus.OK)
         }.orElse(ResponseEntity<Realty>(HttpStatus.INTERNAL_SERVER_ERROR))
