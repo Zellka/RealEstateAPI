@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity
 import org.springframework.util.ObjectUtils
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.util.UriComponentsBuilder
+import java.time.LocalDate
+import java.time.Month
 
 @RestController
 @RequestMapping("/api")
@@ -33,6 +35,15 @@ class OrderController {
             return ResponseEntity<OrderRealty>(order.get(), HttpStatus.OK)
         }
         return ResponseEntity<OrderRealty>(HttpStatus.NOT_FOUND)
+    }
+
+    @RequestMapping("/orders/date/{year}/{month}/{day}")
+    fun findByCreatedDateAfter(@PathVariable year: Int, @PathVariable month: Int, @PathVariable day: Int): ResponseEntity<List<OrderRealty>> {
+        val orders = repository.findByCreatedDateAfter(LocalDate.of(year, month, day))
+        if (orders.isEmpty()) {
+            return ResponseEntity<List<OrderRealty>>(HttpStatus.NO_CONTENT)
+        }
+        return ResponseEntity<List<OrderRealty>>(orders, HttpStatus.OK)
     }
 
     @RequestMapping("/orders/employee/{id}")
