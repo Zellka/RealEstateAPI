@@ -12,16 +12,15 @@ data class Realty(
     @ManyToOne
     @JoinColumn(name = "category_id")
     val categoryId: Category,
-    val square: Long,
-    val numFloor: Int,
+    @ManyToOne
+    @JoinColumn(name = "type_id")
+    val typeId: Type,
     @ManyToOne
     @JoinColumn(name = "owner_id")
     val ownerId: OwnerRealty,
     val date: LocalDate,
-    val numViews: Int,
     val price: Long,
     val address: String,
-    val city: String,
     @ManyToOne
     @JoinColumn(name = "country_id")
     val countryId: Country

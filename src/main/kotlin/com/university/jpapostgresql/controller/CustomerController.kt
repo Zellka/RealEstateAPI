@@ -10,8 +10,6 @@ import org.springframework.util.ObjectUtils
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.util.UriComponentsBuilder
 
-//http://localhost:8080/api/
-
 @RestController
 @RequestMapping("/api")
 class CustomerController {
@@ -52,9 +50,8 @@ class CustomerController {
     fun updateCustomerById(@PathVariable("id") id: Long, @RequestBody customer: Customer): ResponseEntity<Customer> {
         return repository.findById(id).map { customerDetails ->
             val updatedCustomer: Customer = customerDetails.copy(
-                organization = customer.organization,
+                name = customer.name,
                 phone = customer.phone,
-                address = customer.address,
                 city = customer.city,
                 countryId = customer.countryId
             )

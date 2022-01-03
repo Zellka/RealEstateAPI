@@ -14,9 +14,6 @@ interface RealtyRepository : JpaRepository<Realty, Long> {
     @Query("select avg(r.price) from Realty r where r.categoryId.id = :categoryId")
     fun findAvgPrice(categoryId: Long): Long
 
-    @Query("select avg(r.price) from Realty r where r.categoryId.id = :categoryId and r.city = :city")
-    fun findAvgPrice(categoryId: Long, city: String): Long
-
     @Query("select r from Realty r, OrderRealty o where r.id = o.realtyId.id")
     fun findSoldRealty(): List<Realty>
 

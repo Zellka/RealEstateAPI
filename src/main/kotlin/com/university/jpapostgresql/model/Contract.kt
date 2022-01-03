@@ -4,16 +4,16 @@ import java.time.LocalDate
 import javax.persistence.*
 
 @Entity
-data class OrderRealty(
+data class Contract(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     val id: Long = -1,
+    @OneToOne
+    @JoinColumn(name = "order_realty_id")
+    val orderRealtyId: OrderRealty,
     @ManyToOne
-    @JoinColumn(name = "realty_id")
-    val realtyId: Realty,
-    @ManyToOne
-    @JoinColumn(name = "customer_id")
-    val customerId: Customer,
+    @JoinColumn(name = "employee_id")
+    val employeeId: Employee,
     val price: Long,
     val date: LocalDate
 )

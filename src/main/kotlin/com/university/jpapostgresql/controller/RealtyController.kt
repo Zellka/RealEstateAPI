@@ -14,7 +14,7 @@ import java.time.LocalDate
 @RestController
 @RequestMapping("/api")
 class RealtyController {
-
+//http://localhost:8080/api/realty-list
     @Autowired
     lateinit var repository: RealtyRepository
 
@@ -58,10 +58,6 @@ class RealtyController {
     fun findAvgPrice(@PathVariable categoryId: Long) =
         repository.findAvgPrice(categoryId)
 
-    @RequestMapping("/realty-list/avg-price/{categoryId}/{city}")
-    fun findAvgPrice(@PathVariable categoryId: Long, @PathVariable city: String) =
-        repository.findAvgPrice(categoryId, city)
-
     @RequestMapping("/realty-list/count-sold-realty/{categoryId}")
     fun findCountSoldRealtyByCategoryId(@PathVariable categoryId: Long) =
         repository.findCountSoldRealtyByCategoryId(categoryId)
@@ -101,10 +97,11 @@ class RealtyController {
             val updatedRealty: Realty = realtyDetails.copy(
                 description = realty.description,
                 categoryId = realty.categoryId,
+                typeId = realty.typeId,
                 ownerId = realty.ownerId,
+                date = realty.date,
                 price = realty.price,
                 address = realty.address,
-                city = realty.city,
                 countryId = realty.countryId
             )
             ResponseEntity(repository.save(updatedRealty), HttpStatus.OK)

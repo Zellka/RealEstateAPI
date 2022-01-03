@@ -44,15 +44,6 @@ class EmployeeController {
         return ResponseEntity<List<Employee>>(employees, HttpStatus.OK)
     }
 
-    @RequestMapping("/employees/sum-sale/{sum}")
-    fun findBySumSale(@PathVariable sum: Long): ResponseEntity<List<Employee>> {
-        val employees = repository.findBySumSale(sum)
-        if (employees.isEmpty()) {
-            return ResponseEntity<List<Employee>>(HttpStatus.NO_CONTENT)
-        }
-        return ResponseEntity<List<Employee>>(employees, HttpStatus.OK)
-    }
-
     @PostMapping("/employees")
     fun addEmployee(@RequestBody employee: Employee, uri: UriComponentsBuilder): ResponseEntity<Employee> {
         val persistedEmployee = repository.save(employee)
@@ -68,11 +59,9 @@ class EmployeeController {
     fun updateEmployeeById(@PathVariable("id") id: Long, @RequestBody employee: Employee): ResponseEntity<Employee> {
         return repository.findById(id).map { employeeDetails ->
             val updatedEmployee: Employee = employeeDetails.copy(
-                surname = employee.surname,
                 name = employee.name,
                 phone = employee.phone,
                 address = employee.address,
-                city = employee.city,
                 countryId = employee.countryId,
                 numYearWork = employee.numYearWork
             )
