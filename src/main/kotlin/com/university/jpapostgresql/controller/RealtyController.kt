@@ -14,7 +14,7 @@ import java.time.LocalDate
 @RestController
 @RequestMapping("/api")
 class RealtyController {
-//http://localhost:8080/api/realty-list
+    
     @Autowired
     lateinit var repository: RealtyRepository
 
