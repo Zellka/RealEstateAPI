@@ -11,4 +11,7 @@ interface OrderRepository : JpaRepository<OrderRealty, Long> {
 
     @Query("select o from OrderRealty o where o.date > :date")
     fun findByCreatedDateAfter(date: LocalDate): List<OrderRealty>
+
+    @Query("select o from OrderRealty o where o.customerId.id = :id")
+    fun findByCustomer(id: Long): List<OrderRealty>
 }
