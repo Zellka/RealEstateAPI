@@ -35,6 +35,15 @@ class CustomerController {
         return ResponseEntity<Customer>(HttpStatus.NOT_FOUND)
     }
 
+    @RequestMapping("/customers/phone-number/{phone}")
+    fun findByPhone(@PathVariable phone: String): ResponseEntity<Customer> {
+        val customer = repository.findByPhone(phone)
+        if (customer.isPresent) {
+            return ResponseEntity<Customer>(customer.get(), HttpStatus.OK)
+        }
+        return ResponseEntity<Customer>(HttpStatus.NOT_FOUND)
+    }
+
     @PostMapping("/customers")
     fun addCustomer(@RequestBody customer: Customer, uri: UriComponentsBuilder): ResponseEntity<Customer> {
         val persistedCustomer = repository.save(customer)
