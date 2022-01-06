@@ -52,7 +52,7 @@ class CustomerController {
         }
         val headers = HttpHeaders()
         headers.setLocation(uri.path("/customer/{id}").buildAndExpand(customer.id).toUri());
-        return ResponseEntity(headers, HttpStatus.CREATED)
+        return ResponseEntity(persistedCustomer, HttpStatus.CREATED)
     }
 
     @PutMapping("/customers/{id}")
