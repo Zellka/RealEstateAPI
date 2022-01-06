@@ -43,7 +43,7 @@ class CountryController {
         }
         val headers = HttpHeaders()
         headers.setLocation(uri.path("/country/{id}").buildAndExpand(country.id).toUri());
-        return ResponseEntity(headers, HttpStatus.CREATED)
+        return ResponseEntity(persistedCountry, HttpStatus.CREATED)
     }
 
     @PutMapping("/countries/{id}")
