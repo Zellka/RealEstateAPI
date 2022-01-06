@@ -64,7 +64,7 @@ class OwnerController {
         }
         val headers = HttpHeaders()
         headers.setLocation(uri.path("/owner/{id}").buildAndExpand(owner.id).toUri());
-        return ResponseEntity(headers, HttpStatus.CREATED)
+        return ResponseEntity(persistedOwner, HttpStatus.CREATED)
     }
 
     @PutMapping("/owners/{id}")
