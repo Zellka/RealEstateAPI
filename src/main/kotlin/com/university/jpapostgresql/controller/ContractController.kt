@@ -43,7 +43,7 @@ class ContractController {
         }
         val headers = HttpHeaders()
         headers.setLocation(uri.path("/contract/{id}").buildAndExpand(contract.id).toUri());
-        return ResponseEntity(headers, HttpStatus.CREATED)
+        return ResponseEntity(persistedContract, HttpStatus.CREATED)
     }
 
     @PutMapping("/contract/{id}")
