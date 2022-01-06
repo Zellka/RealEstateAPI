@@ -43,7 +43,7 @@ class CategoryController {
         }
         val headers = HttpHeaders()
         headers.setLocation(uri.path("/category/{id}").buildAndExpand(category.id).toUri());
-        return ResponseEntity(headers, HttpStatus.CREATED)
+        return ResponseEntity(persistedCategory, HttpStatus.CREATED)
     }
 
     @PutMapping("/categories/{id}")
