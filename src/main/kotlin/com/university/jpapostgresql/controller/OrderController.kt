@@ -68,7 +68,7 @@ class OrderController {
         }
         val headers = HttpHeaders()
         headers.setLocation(uri.path("/order/{id}").buildAndExpand(order.id).toUri());
-        return ResponseEntity(headers, HttpStatus.CREATED)
+        return ResponseEntity(persistedOrder, HttpStatus.CREATED)
     }
 
     @PutMapping("/order/{id}")
