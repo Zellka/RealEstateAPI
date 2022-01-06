@@ -52,7 +52,7 @@ class EmployeeController {
         }
         val headers = HttpHeaders()
         headers.setLocation(uri.path("/employee/{id}").buildAndExpand(employee.id).toUri());
-        return ResponseEntity(headers, HttpStatus.CREATED)
+        return ResponseEntity(persistedEmployee, HttpStatus.CREATED)
     }
 
     @PutMapping("/employees/{id}")
