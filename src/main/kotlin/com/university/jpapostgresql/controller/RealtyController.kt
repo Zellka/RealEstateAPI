@@ -14,7 +14,6 @@ import java.time.LocalDate
 @RestController
 @RequestMapping("/api")
 class RealtyController {
-    
     @Autowired
     lateinit var repository: RealtyRepository
 
@@ -88,7 +87,7 @@ class RealtyController {
         }
         val headers = HttpHeaders()
         headers.setLocation(uri.path("/realty/{id}").buildAndExpand(realty.id).toUri());
-        return ResponseEntity(headers, HttpStatus.CREATED)
+        return ResponseEntity(persistedRealty, HttpStatus.CREATED)
     }
 
     @PutMapping("/realty-list/{id}")
