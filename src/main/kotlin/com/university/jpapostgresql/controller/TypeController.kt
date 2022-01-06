@@ -43,7 +43,7 @@ class TypeController {
         }
         val headers = HttpHeaders()
         headers.setLocation(uri.path("/type/{id}").buildAndExpand(type.id).toUri());
-        return ResponseEntity(headers, HttpStatus.CREATED)
+        return ResponseEntity(persistedType, HttpStatus.CREATED)
     }
 
     @PutMapping("/types/{id}")
